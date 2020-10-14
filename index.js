@@ -15,11 +15,15 @@ app.get('/', (req, res) => {
 const uri =`mongodb+srv://creative-agency:LYcv18MbUdCKeV7P@cluster0.egr2g.mongodb.net/creativeAgency?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
-    const agentCollection = client.db("creativeAgency").collection("shabnam");
+    const formCollection = client.db("creativeAgency").collection("shabnam");
     const iconCollention = client.db("creativeAgency").collection("icon");
     const serviceCollention = client.db("creativeAgency").collection("service");
     const clientFeedback = client.db("creativeAgency").collection("feedback");
-    
+    const clientReview = client.db("creativeAgency").collection("review");
+    const clientStatus = client.db("creativeAgency").collection("status");
+
+
+
 //this is for sending icons 
     app.get('/icon', (req, res) => {
         iconCollention.find({})
@@ -43,6 +47,34 @@ client.connect(err => {
                 res.send(documents);
             })
     })
+
+    // this is for order status NOT WORKING
+    app.get('/status', (req, res) => {
+        clientStatus.find({})
+            .toArray((err, documents) => {
+                res.send(documents);
+            })
+    })
+
+    // this is to send data from service details component 
+    app.post('/addService', (req, res) => {
+        const registrationsDetails = req.body;
+        formCollection.insertOne(registrationsDetails)
+          .then(result => {
+            console.log(result.insertedCount);
+            res.send(result)
+          })
+      })
+
+      // this is to send review data to backend from review component
+      app.post('/review', (req, res) => {
+        const review = req.body;
+        clientReview.insertOne(review)
+          .then(result => {
+            console.log(result.insertedCount);
+            res.send(result)
+          })
+      })
     // app.get('/register/:id', (req, res) => {
     //     eventsCollection.find({_id: ObjectId(req.params.id)})
     //         .toArray((err, documents) => {
