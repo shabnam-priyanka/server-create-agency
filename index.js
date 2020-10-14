@@ -69,7 +69,7 @@ client.connect(err => {
       // this is to send review data to backend from review component
       app.post('/review', (req, res) => {
         const review = req.body;
-        clientReview.insertOne(review)
+        clientFeedback.insertOne(review)
           .then(result => {
             console.log(result.insertedCount);
             res.send(result)
@@ -81,12 +81,12 @@ client.connect(err => {
     //             res.send(documents[0])
     //         })
     // })
-    // app.get('/specificRegistration', (req, res) => {
-    //     registrations.find({ email: req.query.email })
-    //         .toArray((err, documents) => {
-    //             res.send(documents)
-    //         })
-    // })
+    app.get('/orderstatus', (req, res) => {
+        formCollection.find({ email: req.query.email })
+            .toArray((err, documents) => {
+                res.send(documents)
+            })
+    })
     // // function for getting the data..
     // app.get(/allUsers, (req, res) => {
     //     registrations.find({})
