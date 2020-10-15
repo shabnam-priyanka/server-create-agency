@@ -21,8 +21,7 @@ client.connect(err => {
     const orderCollection = client.db("creativeAgency").collection("addOrder");
 
     const clientFeedback = client.db("creativeAgency").collection("feedback");
-    //const clientReview = client.db("creativeAgency").collection("review");
-    // const clientStatus = client.db("creativeAgency").collection("status");
+    
     const adminEmail = client.db("creativeAgency").collection("admin");
     
 
@@ -90,6 +89,16 @@ app.get('/showallorder', (req, res) => {
     app.post('/addService', (req, res) => {
         const Details = req.body;
         serviceCollection.insertOne(Details)
+            .then(result => {
+                console.log(result.insertedCount);
+                res.send(result)
+            })
+    })
+
+    //add admin
+    app.post('/addadmin', (req, res) => {
+        const admin = req.body;
+        adminEmail.insertOne(admin)
             .then(result => {
                 console.log(result.insertedCount);
                 res.send(result)
