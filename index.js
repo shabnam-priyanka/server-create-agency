@@ -23,8 +23,8 @@ client.connect(err => {
     const clientFeedback = client.db("creativeAgency").collection("feedback");
     //const clientReview = client.db("creativeAgency").collection("review");
     // const clientStatus = client.db("creativeAgency").collection("status");
-
-
+    const adminEmail = client.db("creativeAgency").collection("admin");
+    
 
     //this is for sending icons 
     app.get('/icon', (req, res) => {
@@ -50,7 +50,21 @@ client.connect(err => {
             })
     })
 
+//show customer order details for admin panel
+app.get('/adminEmail', (req, res) => {
+    adminEmail.find({email: req.query.email})
+        .toArray((err, documents) => {
+            res.send(documents);
+        })
+})
 
+//all order data will show in userpanel 
+app.get('/showallorder', (req, res) => {
+    orderCollection.find({})
+        .toArray((err, documents) => {
+            res.send(documents);
+        })
+})
 
     // this is to send data from service details component 
     app.post('/addOrder', (req, res) => {
@@ -72,6 +86,15 @@ client.connect(err => {
             })
     })
     
+    //service add korbe 
+    app.post('/addService', (req, res) => {
+        const Details = req.body;
+        serviceCollection.insertOne(Details)
+            .then(result => {
+                console.log(result.insertedCount);
+                res.send(result)
+            })
+    })
 
 
     // find with email
